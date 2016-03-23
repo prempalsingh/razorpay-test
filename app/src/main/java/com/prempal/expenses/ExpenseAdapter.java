@@ -9,7 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by prempal on 23/3/16.
@@ -32,10 +37,21 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        DateFormat targetFormat = new SimpleDateFormat("h:mm a, MMM d, ''yy", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = originalFormat.parse(expenses.get(position).getTime());
+            String formattedDate = targetFormat.format(date);
+            holder.time.setText(formattedDate);
+        } catch (ParseException e) {
+            holder.time.setText(expenses.get(position).getTime());
+            e.printStackTrace();
+        }
+
         holder.category.setText(expenses.get(position).getCategory());
         holder.description.setText(expenses.get(position).getDescription());
         holder.amount.setText("Amount : ₹" + expenses.get(position).getAmount());
-        holder.time.setText(expenses.get(position).getTime());
         holder.state.setText("State : " + expenses.get(position).getState());
 
         holder.view.setOnClickListener(new View.OnClickListener() {

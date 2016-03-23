@@ -27,7 +27,6 @@
             android:maxLines="1"
             android:rotation="45"
             android:singleLine="true"
-            android:text="Recharge"
             android:textAppearance="?android:textAppearanceLargeInverse"
             android:textSize="12dp"
             android:translationX="40dp"
@@ -42,7 +41,7 @@
             android:layout_toLeftOf="@+id/tv_category"
             android:layout_toStartOf="@+id/tv_category"
             android:maxLines="2"
-            android:text="Recharge of Idea Mobile 8477981111"
+            android:text="Description : "
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -55,7 +54,7 @@
             android:layout_toLeftOf="@+id/tv_category"
             android:layout_toStartOf="@+id/tv_category"
             android:singleLine="true"
-            android:text="2015-09-25T08:25:26.000Z"
+            android:text="Date : "
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -67,7 +66,7 @@
             android:layout_below="@+id/tv_time"
             android:layout_toLeftOf="@+id/tv_category"
             android:layout_toStartOf="@+id/tv_category"
-            android:text="Amount : Rs. 98"
+            android:text="Amount :"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -80,7 +79,7 @@
             android:layout_marginBottom="16dp"
             android:layout_toLeftOf="@+id/tv_category"
             android:layout_toStartOf="@+id/tv_category"
-            android:text="State : Unverified"
+            android:text="State : "
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </RelativeLayout>
