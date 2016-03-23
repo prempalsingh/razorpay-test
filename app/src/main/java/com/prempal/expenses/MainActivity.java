@@ -12,46 +12,29 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String URL = "https://jsonblob.com/api/jsonBlob/56f02ad3e4b01190df5714e8";
     private RecyclerView mRecyclerView;
     private Handler mHandler;
     private ProgressBar mProgressBar;
-    private String FETCH_URL = "https://jsonblob.com/api/jsonBlob/56f02ad3e4b01190df5714e8";
-    private List<ExpenseModel> expenses;
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, FETCH_URL, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    expenses.clear();
                     mProgressBar.setVisibility(View.GONE);
-                    try {
-                        JSONArray array = response.getJSONArray("expenses");
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject object = array.getJSONObject(i);
-                            ExpenseModel expense = new ExpenseModel(object.get("id"), object.getString("description"),
-                                    object.getInt("amount"), object.getString("category"), object.getString("time"),
-                                    object.getString("state"));
-                            expenses.add(expense);
-                        }
-                        if (mRecyclerView.getAdapter() == null) {
-                            mRecyclerView.setAdapter(new ExpenseAdapter(expenses));
-                        } else {
-                            ((ExpenseAdapter) mRecyclerView.getAdapter()).update(expenses);
-                        }
-                    } catch (JSONException e) {
-                        Toast.makeText(MainActivity.this, "Error fetching expenses", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                    Gson gson = new Gson();
+                    ExpenseModel model = gson.fromJson(response.toString(), ExpenseModel.class);
+                    if (mRecyclerView.getAdapter() == null) {
+                        mRecyclerView.setAdapter(new ExpenseAdapter(model));
+                    } else {
+                        ((ExpenseAdapter) mRecyclerView.getAdapter()).update(model);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -73,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.expense_list);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        expenses = new ArrayList<>();
         mHandler = new Handler();
         mHandler.post(runnable);
     }

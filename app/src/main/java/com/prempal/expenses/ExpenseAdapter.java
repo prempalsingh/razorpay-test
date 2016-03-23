@@ -4,10 +4,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,10 +32,12 @@ import java.util.Locale;
  */
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
 
-    private List<ExpenseModel> expenses;
+    private List<ExpenseModel.Expense> expenses;
+    private ExpenseModel model;
 
-    public ExpenseAdapter(List<ExpenseModel> expenses) {
-        this.expenses = expenses;
+    public ExpenseAdapter(ExpenseModel model) {
+        this.model = model;
+        this.expenses = model.getExpenses();
     }
 
     @Override
@@ -35,7 +48,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
         DateFormat targetFormat = new SimpleDateFormat("h:mm a, MMM d, ''yy", Locale.ENGLISH);
@@ -57,7 +70,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(view.getContext());
+                showDialog(view.getContext(), position);
             }
         });
 
@@ -68,27 +81,65 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         return expenses.size();
     }
 
-    public void update(List<ExpenseModel> newExpenses) {
+    public void update(ExpenseModel model) {
 
     }
 
-    private void showDialog(Context context) {
+    private int getCheckedItem(int position) {
+        switch (expenses.get(position).getState()) {
+            case "verified":
+                return 0;
+            case "unverified":
+                return 1;
+            case "fraud":
+                return 2;
+
+        }
+        return 0;
+    }
+
+    private void pushChanges(final Context context, final int position) throws JSONException {
+        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, MainActivity.URL, new JSONObject(new Gson().toJson(model)),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("response", "onResponse: " + response);
+                        notifyItemChanged(position);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Error setting state", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        });
+
+        VolleySingleton.getInstance(context).addToRequestQueue(putRequest);
+    }
+
+    private void showDialog(final Context context, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Expense State");
 
-        String[] items = {"Verified", "Unverified", "Fraud"};
-        builder.setSingleChoiceItems(items, 0,
+        final String[] items = {"verified", "unverified", "fraud"};
+        final int[] choice = {-1};
+        builder.setSingleChoiceItems(items, getCheckedItem(position),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        choice[0] = which;
                     }
                 });
         builder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        expenses.get(position).setState(items[choice[0]]);
+                        try {
+                            pushChanges(context, position);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
         builder.setNegativeButton("Cancel",

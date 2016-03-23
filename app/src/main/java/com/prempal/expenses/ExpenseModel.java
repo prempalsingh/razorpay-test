@@ -1,53 +1,54 @@
 package com.prempal.expenses;
 
+import java.util.List;
+
 /**
  * Created by prempal on 23/3/16.
  */
 public class ExpenseModel {
 
-    private Object id;
-    private String description;
-    private Integer amount;
-    private String category;
-    private String time;
-    private String state;
+    private List<Expense> expenses;
 
-    public ExpenseModel(Object id, String description, Integer amount, String category, String time, String state) {
-        this.id = id;
-        this.description = description;
-        this.amount = amount;
-        this.category = category;
-        this.time = time;
-        this.state = state;
+    public List<Expense> getExpenses() {
+        return expenses;
     }
 
-    public Object getId() {
-        return id;
-    }
+    public class Expense {
 
-    public String getDescription() {
-        return description;
-    }
+        private Object id;
+        private String description;
+        private Integer amount;
+        private String category;
+        private String time;
+        private String state;
 
-    public Integer getAmount() {
-        return amount;
-    }
+        public Object getId() {
+            return id;
+        }
 
-    public String getCategory() {
-        return category;
-    }
+        public String getDescription() {
+            return description;
+        }
 
-    public String getTime() {
-        return time;
-    }
+        public Integer getAmount() {
+            return amount;
+        }
 
-    public String getState() {
-        return state;
-    }
+        public String getCategory() {
+            return category;
+        }
 
-    public void setState(String state) {
-        this.state = state;
-    }
+        public String getTime() {
+            return time;
+        }
 
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+    }
 
 }
