@@ -9,10 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by prempal on 23/3/16.
  */
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
+
+    private List<ExpenseModel> expenses;
+
+    public ExpenseAdapter(List<ExpenseModel> expenses) {
+        this.expenses = expenses;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,6 +32,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        holder.category.setText(expenses.get(position).getCategory());
+        holder.description.setText(expenses.get(position).getDescription());
+        holder.amount.setText("Amount : ₹" + expenses.get(position).getAmount());
+        holder.time.setText(expenses.get(position).getTime());
+        holder.state.setText("State : " + expenses.get(position).getState());
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,34 +45,15 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             }
         });
 
-
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return expenses.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void update(List<ExpenseModel> newExpenses) {
 
-        TextView amount;
-        TextView description;
-        TextView time;
-        TextView state;
-        TextView category;
-        View view;
-
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            view = itemView;
-            category = (TextView) itemView.findViewById(R.id.tv_category);
-            description = (TextView) itemView.findViewById(R.id.tv_description);
-            amount = (TextView) itemView.findViewById(R.id.tv_amount);
-            category = (TextView) itemView.findViewById(R.id.tv_category);
-            time = (TextView) itemView.findViewById(R.id.tv_time);
-            state = (TextView) itemView.findViewById(R.id.tv_state);
-        }
     }
 
     private void showDialog(Context context) {
@@ -90,5 +85,27 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView amount;
+        TextView description;
+        TextView time;
+        TextView state;
+        TextView category;
+        View view;
+
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+            category = (TextView) itemView.findViewById(R.id.tv_category);
+            description = (TextView) itemView.findViewById(R.id.tv_description);
+            amount = (TextView) itemView.findViewById(R.id.tv_amount);
+            category = (TextView) itemView.findViewById(R.id.tv_category);
+            time = (TextView) itemView.findViewById(R.id.tv_time);
+            state = (TextView) itemView.findViewById(R.id.tv_state);
+        }
     }
 }
