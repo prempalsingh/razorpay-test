@@ -81,8 +81,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         return expenses.size();
     }
 
-    public void update(ExpenseModel model) {
-
+    public void update(ExpenseModel newModel) {
+        Log.d("adapter", "update: ");
+        model = newModel;
+        expenses = model.getExpenses();
+        notifyDataSetChanged();
     }
 
     private int getCheckedItem(int position) {

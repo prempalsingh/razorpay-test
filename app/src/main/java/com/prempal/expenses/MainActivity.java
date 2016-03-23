@@ -19,6 +19,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     public static String URL = "https://jsonblob.com/api/jsonBlob/56f02ad3e4b01190df5714e8";
+    private final int REFRESH_PERIOD = 10000;
     private RecyclerView mRecyclerView;
     private Handler mHandler;
     private ProgressBar mProgressBar;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         ((ExpenseAdapter) mRecyclerView.getAdapter()).update(model);
                     }
+                    mHandler.postDelayed(runnable, REFRESH_PERIOD);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this, "Error fetching expenses", Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
+                    mHandler.postDelayed(runnable, REFRESH_PERIOD);
                 }
             });
             request.setShouldCache(false);
@@ -57,7 +60,17 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.expense_list);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mHandler = new Handler();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mHandler.post(runnable);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(runnable);
+    }
 }
