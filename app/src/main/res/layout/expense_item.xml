@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackgroundBorderless"
+    card:cardElevation="2dp"
+    card:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="top|right"
+            android:background="?attr/colorAccent"
+            android:gravity="center_horizontal|bottom"
+            android:maxLines="1"
+            android:rotation="45"
+            android:singleLine="true"
+            android:text="Recharge"
+            android:textAppearance="?android:textAppearanceLargeInverse"
+            android:textSize="12dp"
+            android:translationX="40dp"
+            android:translationY="-40dp" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/tv_category"
+            android:layout_toStartOf="@+id/tv_category"
+            android:maxLines="2"
+            android:text="Recharge of Idea Mobile 8477981111"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_description"
+            android:layout_toLeftOf="@+id/tv_category"
+            android:layout_toStartOf="@+id/tv_category"
+            android:singleLine="true"
+            android:text="2015-09-25T08:25:26.000Z"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_time"
+            android:layout_toLeftOf="@+id/tv_category"
+            android:layout_toStartOf="@+id/tv_category"
+            android:text="Amount : Rs. 98"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_amount"
+            android:layout_toLeftOf="@+id/tv_category"
+            android:layout_toStartOf="@+id/tv_category"
+            android:text="Status : Unverified"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
