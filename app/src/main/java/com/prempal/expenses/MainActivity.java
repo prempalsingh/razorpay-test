@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private Handler mHandler;
+    private ProgressBar mProgressBar;
     private String FETCH_URL = "https://jsonblob.com/api/jsonBlob/56f02ad3e4b01190df5714e8";
     private List<ExpenseModel> expenses;
     private Runnable runnable = new Runnable() {
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     expenses.clear();
+                    mProgressBar.setVisibility(View.GONE);
                     try {
                         JSONArray array = response.getJSONArray("expenses");
                         for (int i = 0; i < array.length(); i++) {
@@ -45,12 +50,15 @@ public class MainActivity extends AppCompatActivity {
                             ((ExpenseAdapter) mRecyclerView.getAdapter()).update(expenses);
                         }
                     } catch (JSONException e) {
+                        Toast.makeText(MainActivity.this, "Error fetching expenses", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this, "Error fetching expenses", Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
                 }
             });
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.expense_list);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         expenses = new ArrayList<>();
         mHandler = new Handler();
         mHandler.post(runnable);

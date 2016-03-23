@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context="com.prempal.expenses.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/expense_list"
         android:layout_width="match_parent"
